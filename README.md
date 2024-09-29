@@ -1,5 +1,7 @@
 # Overview
 
+_For educational purposes only. Obviously I would never use this, obviously.
+
 This is a simple python script that automates grading questions on gradescope.
 
 You will need to provide the following inputs, specified in `main.py`:
@@ -8,6 +10,8 @@ You will need to provide the following inputs, specified in `main.py`:
 - A link to a submission on Gradescope
 
 A Chrome browser will open up and automatically go through each question and grade them, _marking only correct answers and leaving potentially incorrect ones for human review._
+
+Note: the code uses [Baml](https://docs.boundaryml.com/docs/snippets/clients/overview), refer to their documentation if you need to edit the `baml_src/` files.
 
 # Usage
 
