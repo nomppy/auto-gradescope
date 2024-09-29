@@ -57,11 +57,11 @@ class BamlSyncClient:
       return self.__stream_client
 
     
-    def ExtractAnswer(
+    def ExtractAnswers(
         self,
         img: baml_py.Image,question: str,
         baml_options: BamlCallOptions = {},
-    ) -> types.StudentResponse:
+    ) -> List[types.Subpart]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -70,7 +70,7 @@ class BamlSyncClient:
       __cr__ = baml_options.get("client_registry", None)
 
       raw = self.__runtime.call_function_sync(
-        "ExtractAnswer",
+        "ExtractAnswers",
         {
           "img": img,"question": question,
         },
@@ -78,7 +78,7 @@ class BamlSyncClient:
         tb,
         __cr__,
       )
-      mdl = create_model("ExtractAnswerReturnType", inner=(types.StudentResponse, ...))
+      mdl = create_model("ExtractAnswersReturnType", inner=(List[types.Subpart], ...))
       return coerce(mdl, raw.parsed())
     
     def ExtractResume(
@@ -105,11 +105,35 @@ class BamlSyncClient:
       mdl = create_model("ExtractResumeReturnType", inner=(types.Resume, ...))
       return coerce(mdl, raw.parsed())
     
+    def GradeFromAnswers(
+        self,
+        answers: List[types.Subpart],solution: str,
+        baml_options: BamlCallOptions = {},
+    ) -> List[types.GradedSubpart]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.call_function_sync(
+        "GradeFromAnswers",
+        {
+          "answers": answers,"solution": solution,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      mdl = create_model("GradeFromAnswersReturnType", inner=(List[types.GradedSubpart], ...))
+      return coerce(mdl, raw.parsed())
+    
     def GradeQuestion(
         self,
         img: baml_py.Image,question: str,solution: str,
         baml_options: BamlCallOptions = {},
-    ) -> types.GradedQuestion:
+    ) -> List[types.GradedSubpart]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -126,7 +150,7 @@ class BamlSyncClient:
         tb,
         __cr__,
       )
-      mdl = create_model("GradeQuestionReturnType", inner=(types.GradedQuestion, ...))
+      mdl = create_model("GradeQuestionReturnType", inner=(List[types.GradedSubpart], ...))
       return coerce(mdl, raw.parsed())
     
 
@@ -141,11 +165,11 @@ class BamlStreamClient:
       self.__ctx_manager = ctx_manager
 
     
-    def ExtractAnswer(
+    def ExtractAnswers(
         self,
         img: baml_py.Image,question: str,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlSyncStream[partial_types.StudentResponse, types.StudentResponse]:
+    ) -> baml_py.BamlSyncStream[List[partial_types.Subpart], List[types.Subpart]]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -154,7 +178,7 @@ class BamlStreamClient:
       __cr__ = baml_options.get("client_registry", None)
 
       raw = self.__runtime.stream_function_sync(
-        "ExtractAnswer",
+        "ExtractAnswers",
         {
           "img": img,
           "question": question,
@@ -165,10 +189,10 @@ class BamlStreamClient:
         __cr__,
       )
 
-      mdl = create_model("ExtractAnswerReturnType", inner=(types.StudentResponse, ...))
-      partial_mdl = create_model("ExtractAnswerPartialReturnType", inner=(partial_types.StudentResponse, ...))
+      mdl = create_model("ExtractAnswersReturnType", inner=(List[types.Subpart], ...))
+      partial_mdl = create_model("ExtractAnswersPartialReturnType", inner=(List[partial_types.Subpart], ...))
 
-      return baml_py.BamlSyncStream[partial_types.StudentResponse, types.StudentResponse](
+      return baml_py.BamlSyncStream[List[partial_types.Subpart], List[types.Subpart]](
         raw,
         lambda x: coerce(partial_mdl, x),
         lambda x: coerce(mdl, x),
@@ -208,11 +232,45 @@ class BamlStreamClient:
         self.__ctx_manager.get(),
       )
     
+    def GradeFromAnswers(
+        self,
+        answers: List[types.Subpart],solution: str,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlSyncStream[List[partial_types.GradedSubpart], List[types.GradedSubpart]]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function_sync(
+        "GradeFromAnswers",
+        {
+          "answers": answers,
+          "solution": solution,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      mdl = create_model("GradeFromAnswersReturnType", inner=(List[types.GradedSubpart], ...))
+      partial_mdl = create_model("GradeFromAnswersPartialReturnType", inner=(List[partial_types.GradedSubpart], ...))
+
+      return baml_py.BamlSyncStream[List[partial_types.GradedSubpart], List[types.GradedSubpart]](
+        raw,
+        lambda x: coerce(partial_mdl, x),
+        lambda x: coerce(mdl, x),
+        self.__ctx_manager.get(),
+      )
+    
     def GradeQuestion(
         self,
         img: baml_py.Image,question: str,solution: str,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlSyncStream[partial_types.GradedQuestion, types.GradedQuestion]:
+    ) -> baml_py.BamlSyncStream[List[partial_types.GradedSubpart], List[types.GradedSubpart]]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -233,10 +291,10 @@ class BamlStreamClient:
         __cr__,
       )
 
-      mdl = create_model("GradeQuestionReturnType", inner=(types.GradedQuestion, ...))
-      partial_mdl = create_model("GradeQuestionPartialReturnType", inner=(partial_types.GradedQuestion, ...))
+      mdl = create_model("GradeQuestionReturnType", inner=(List[types.GradedSubpart], ...))
+      partial_mdl = create_model("GradeQuestionPartialReturnType", inner=(List[partial_types.GradedSubpart], ...))
 
-      return baml_py.BamlSyncStream[partial_types.GradedQuestion, types.GradedQuestion](
+      return baml_py.BamlSyncStream[List[partial_types.GradedSubpart], List[types.GradedSubpart]](
         raw,
         lambda x: coerce(partial_mdl, x),
         lambda x: coerce(mdl, x),

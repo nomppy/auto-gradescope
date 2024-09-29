@@ -12,10 +12,15 @@ from baml_client.sync_client import b
 
 # TODO CHANGE THESE VALUES
 QUESTION = '2.3.30'
+SUBPARTS = 3
 SOLUTION = """
-    solution "$2. 3. \textbf{30 a See Figure }2. 44.$ Figure 2.44: for Problem 2.4.30.  The vectors $\vec{x}$ and $T(\vec{x})$ have the same length (since reflections leave the length unchanged), and they enclose an angle of $2(\alpha+\beta)=2\cdot30^\circ=60^\circ$ b Based on the answer in part (a), we conclude that $T$ is a rotation through $60^\circ.$ c The matrix of $T$ is $\begin{bmatrix}\cos(60^\circ)&-\sin(60^\circ)\\\sin(60^\circ)&\cos(60^\circ)\end{bmatrix}=\begin{bmatrix}\frac{1}{2}&-\frac{\sqrt{3}}{2}\\\frac{\sqrt{3}}{2}&\frac{1}{2}\end{bmatrix}.$"
+    If no direction is specified, we assume that the rotation is counterclockwise.
+    a) The vectors $\vec{x}$ and $T(\vec{x})$ have the same length (since reflections leave the length unchanged), and they enclose an angle of $2(\alpha+\beta)=2\cdot30^\circ=60^\circ$ 
+    b) Based on the answer in part (a), we conclude that $T$ is a rotation through $60^\circ.$ 
+    c) The matrix of $T$ is $\begin{bmatrix}\cos(60^\circ)&-\sin(60^\circ)\\\sin(60^\circ)&\cos(60^\circ)\end{bmatrix}=\begin{bmatrix}\frac{1}{2}&-\frac{\sqrt{3}}{2}\\\frac{\sqrt{3}}{2}&\frac{1}{2}\end{bmatrix}.$"
+    d) The transformation L is a 60 degree rotation counterclockwise, the matrix of L is [[cos(60), -sin(60)], [sin(60), cos(60)]] = [[1/2, -sqrt(3)/2], [sqrt(3)/2, 1/2]]
 """
-SUBMISSION_URL = 'https://www.gradescope.com/courses/818618/questions/39149037/submissions/2410136796/grade'
+SUBMISSION_URL = 'https://www.gradescope.com/courses/818618/questions/39149037/submissions/2412936184/grade'
 
 def load_cookies(filename):
     with open(filename, 'r') as cookiesfile:
@@ -52,11 +57,12 @@ gg_gonext()
 while True:
     image_url = driver.find_element(By.XPATH, "//div[@class='pv--viewport']/img").get_attribute("src")
     img = Image.from_url(image_url)
+    # ans = b.ExtractAnswers(img, question=QUESTION)
+    # res = b.GradeFromAnswers(ans, solution=SOLUTION)
     res = b.GradeQuestion(img, question=QUESTION, solution=SOLUTION)
-    if all(sp.correct for sp in res.answers):
+    if len(res) >= SUBPARTS and all(sp.correct for sp in res):
         print('all right!')
         yay()
-        sleep(0.1)
     gg_gonext()
 
 

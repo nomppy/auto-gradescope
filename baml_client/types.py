@@ -19,15 +19,10 @@ from pydantic import BaseModel, ConfigDict
 from typing import Dict, List, Optional, Union
 
 
-class GradedQuestion(BaseModel):
-    
-    
-    answers: List["GradedSubpart"]
-
 class GradedSubpart(BaseModel):
     
     
-    subpart: "Subpart"
+    subpartId: str
     correct: bool
 
 class Resume(BaseModel):

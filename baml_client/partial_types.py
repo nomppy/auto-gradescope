@@ -28,15 +28,10 @@ from . import types
 ###############################################################################
 
 
-class GradedQuestion(BaseModel):
-    
-    
-    answers: List["GradedSubpart"]
-
 class GradedSubpart(BaseModel):
     
     
-    subpart: Optional["Subpart"] = None
+    subpartId: Optional[str] = None
     correct: Optional[bool] = None
 
 class Resume(BaseModel):
