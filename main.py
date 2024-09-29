@@ -10,10 +10,12 @@ from selenium.webdriver.chrome.options import Options
 from baml_py import Image
 from baml_client.sync_client import b
 
-question = '2.3.30'
-solution = """
+# TODO CHANGE THESE VALUES
+QUESTION = '2.3.30'
+SOLUTION = """
     solution "$2. 3. \textbf{30 a See Figure }2. 44.$ Figure 2.44: for Problem 2.4.30.  The vectors $\vec{x}$ and $T(\vec{x})$ have the same length (since reflections leave the length unchanged), and they enclose an angle of $2(\alpha+\beta)=2\cdot30^\circ=60^\circ$ b Based on the answer in part (a), we conclude that $T$ is a rotation through $60^\circ.$ c The matrix of $T$ is $\begin{bmatrix}\cos(60^\circ)&-\sin(60^\circ)\\\sin(60^\circ)&\cos(60^\circ)\end{bmatrix}=\begin{bmatrix}\frac{1}{2}&-\frac{\sqrt{3}}{2}\\\frac{\sqrt{3}}{2}&\frac{1}{2}\end{bmatrix}.$"
 """
+SUBMISSION_URL = 'https://www.gradescope.com/courses/818618/questions/39149037/submissions/2410136796/grade'
 
 def load_cookies(filename):
     with open(filename, 'r') as cookiesfile:
@@ -21,7 +23,6 @@ def load_cookies(filename):
     return cookies
 
 base = 'https://www.gradescope.com'
-target = 'https://www.gradescope.com/courses/818618/questions/39149037/submissions/2410136796/grade'
 cookies = load_cookies('cookies.json')
 
 options = Options()
@@ -33,7 +34,7 @@ driver.get(base)
 for ck in cookies:
     driver.add_cookie(ck)
 
-driver.get(target)
+driver.get(SUBMISSION_URL)
 wait = WebDriverWait(driver, 10)
 wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'pv--viewport')))
 
@@ -51,7 +52,7 @@ gg_gonext()
 while True:
     image_url = driver.find_element(By.XPATH, "//div[@class='pv--viewport']/img").get_attribute("src")
     img = Image.from_url(image_url)
-    res = b.GradeQuestion(img, question=question, solution=solution)
+    res = b.GradeQuestion(img, question=QUESTION, solution=SOLUTION)
     if all(sp.correct for sp in res.answers):
         print('all right!')
         yay()
